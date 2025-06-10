@@ -1,0 +1,16 @@
+{
+    "editor.fontFamily": "Limelight",
+     "editor.fontFamily": "Monsieur La Doulaise",
+      "editor.fontFamily": "Eagle Lake",
+       "editor.fontFamily": "Tangerine",
+     "editor.fontFamily": "Pirata One",
+    "editor.fontFamily": "Playfair Display",
+
+    // "editor.mouseWheelZoom": true,
+    // "workbench.colorCustomizations": {
+    //     "editor.background": "#eee8d5",
+    //     "editor.selectionBackground": "#93a1a1",
+    //     "editor.lineHighlightBackground": "#fdf6e3",
+
+    // }
+}

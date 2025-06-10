@@ -1,0 +1,39 @@
+.container{
+    width: 1600px;
+    height: 1050px;
+    background-image: url('../img/world.svg');
+    background-size: cover;
+    margin: 0 auto;
+    /* filter: invert(0.1); */
+    position: absolute;
+    border-radius: 10px;
+    margin-top: 2.5px;
+    z-index: 2;
+}
+.grids{
+    display: grid;
+    grid-template-columns: repeat(64, 20px);
+    grid-template-rows: repeat(42, 20px);
+    column-gap: 5px;
+    row-gap: 5px;
+    width: 1600px;
+    height: 1050px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.square{
+    background: #000;
+
+}
+body{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+    width: calc(100% - 50px);
+    overscroll-behavior: none;
+    padding-top: 0px;
+    overflow: hidden;
+    /* background: rgb(0, 191, 255); */
+}
