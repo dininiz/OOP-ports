@@ -12,10 +12,8 @@
 }
 .grids{
     display: grid;
-    grid-template-columns: repeat(64, 20px);
-    grid-template-rows: repeat(42, 20px);
-    column-gap: 5px;
-    row-gap: 5px;
+    grid-template-columns: repeat(64, 25px);
+    grid-template-rows: repeat(42, 25px);
     width: 1600px;
     height: 1050px;
     width: 100%;
@@ -23,8 +21,10 @@
     position: relative;
 }
 .square{
-    background: #000;
-
+    background: white;
+}
+.square-dark{
+    background: black;
 }
 body{
     display: flex;
