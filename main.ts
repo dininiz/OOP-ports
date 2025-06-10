@@ -20,6 +20,13 @@ serve(async (_req) => {
             return new Response(html, {
                 headers: { "Content-Type": "text/html" },
             });
+        } else if (url.pathname.startsWith("/js/")) {
+            const filePath = `web${url.pathname}`;
+            const file = await Deno.readFile(filePath);
+            const contentType = getContentType(filePath);
+            return new Response(file, {
+                headers: { "Content-Type": contentType },
+            });
         } else {
             return new Response("Not Found", { status: 404 });
         }
@@ -35,5 +42,6 @@ function getContentType(filePath: string): string {
     if (filePath.endsWith(".jpg") || filePath.endsWith(".jpeg")) return "image/jpeg";
     if (filePath.endsWith(".gif")) return "image/gif";
     if (filePath.endsWith(".css")) return "text/css";
+    if (filePath.endsWith(".css")) return "text/js";
     return "application/octet-stream"; // Default content type
 }
