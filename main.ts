@@ -1,14 +1,11 @@
 import { serve } from "https://deno.land/std/http/server.ts";
-import { findPath, isWhite } from "./pathfinding.ts";
 
-const result = findPath ("18-21", "21-33", isWhite, 42, 64)
-console.log(result)
 
 serve(async (_req) => {
     const url = new URL(_req.url, `http://${_req.headers.get("host")}`);
     const pathn = url.pathname;
     async function fileParse(_pathn: string){
-        const filePath = `web${url.pathname}`;
+        const filePath = `web${pathn}`;
             const file = await Deno.readFile(filePath);
             const contentType = getContentType(filePath);
             return new Response(file, {
@@ -24,12 +21,7 @@ serve(async (_req) => {
             const html = await Deno.readTextFile("web/index.html");
             return new Response(html, {
                 headers: { "Content-Type": "text/html" },
-            });
-        } else if (url.pathname === "/pathfinding.ts") {
-            const file = await Deno.readTextFile("pathfinding.ts");
-            return new Response(file, {
-                headers: { "Content-Type": "text/typescript" },
-            });
+        });
         } else if (pathn.startsWith("/js/")) {
            return await fileParse(pathn)
         } else {
