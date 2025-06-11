@@ -20,11 +20,20 @@
     height: 100%;
     position: relative;
 }
-.square{
+/* .square{
     background: white;
 }
 .square-dark{
     background: black;
+} */
+.start{
+    background: green;
+}
+.end{
+    background: red;
+}
+.path{
+    background: blue;
 }
 body{
     display: flex;
