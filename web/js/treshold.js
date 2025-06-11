@@ -15,11 +15,12 @@
         ctx.drawImage(img, 0, 0);
 
         // Get grid and square size
-        const gridRows = 42;
-        const gridCols = 64;
+        const gridRows = 84;
+        const gridCols = 128;
         const gridRect = grids.getBoundingClientRect();
         const squareWidth = gridRect.width / gridCols;
         const squareHeight = gridRect.height / gridRows;
+        const threshold = 128; // Threshold for dark pixels
 
         for (let i = 1; i <= gridRows; i++) {
             for (let j = 1; j <= gridCols; j++) {
@@ -32,10 +33,11 @@
                 } catch (e) {
                     continue; // skip if out of bounds or error
                 }
-                const isDark = pixel[3] > 0;
-                if (isDark) {
+                const brightness = 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2];
+                const value = brightness < threshold ? 0 : 255;
+                if (value === 0) {
                     const square = document.getElementById(`${i}-${j}`);
-                    if (square) square.classList.add('square-dark');
+                 if (square) square.classList.add('square-dark');
                 }
             }
         }

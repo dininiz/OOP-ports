@@ -9,8 +9,8 @@ class PathNode {
   }
 }
 
-document.getElementById('16-19').classList.add('start');
-document.getElementById('21-33').classList.add('end');
+document.getElementById('37-32').classList.add('start');
+document.getElementById('46-110').classList.add('end');
 
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
 function pathfinding(startId, endId, pathNodes) {
-      const rows = 42;
-      const cols = 64;
+      const rows = 84;
+      const cols = 128;
       const grid = [];
       for (let r = 0; r <= rows; r++) {
         grid[r] = [];
@@ -99,7 +99,7 @@ function pathfinding(startId, endId, pathNodes) {
       }
       return null;
     }
-  const path = pathfinding('16-19', '21-33', pathNodes);
+  const path = pathfinding('37-32', '46-110', pathNodes);
   console.log(path);
 
   if (path) {
