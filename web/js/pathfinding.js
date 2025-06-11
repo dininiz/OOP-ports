@@ -53,7 +53,14 @@ function pathfinding(startId, endId, pathNodes) {
       }
       const queue = [[startX, startY, []]];
       const directions = [
-        [0, -1], [0, 1], [-1, 0], [1, 0]
+        [0, -1], 
+        [0, 1], 
+        [-1, 0], 
+        [1, 0],
+        [-1, -1], 
+        [1, 1], 
+        [-1, 1], 
+        [1, -1]
       ];
 
       while (queue.length > 0) {
