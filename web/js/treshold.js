@@ -1,6 +1,7 @@
 // deno-lint-ignore-file
 // === Add dark-square class based on image brightness ===
     // 1. Create a hidden canvas and load the image
+    console.log("Treshold script loaded")
     const img = new Image();
     img.src = '../img/world2.png'; // Path to your imageW
     img.crossOrigin = 'Anonymous';

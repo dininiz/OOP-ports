@@ -2,31 +2,32 @@ import { serve } from "https://deno.land/std/http/server.ts";
 
 serve(async (_req) => {
     const url = new URL(_req.url, `http://${_req.headers.get("host")}`);
-    try {
-        if (url.pathname.startsWith("/img/")) {
-            const filePath = `web${url.pathname}`;
+    const pathn = url.pathname;
+    async function fileParse(_pathn: string){
+        const filePath = `web${url.pathname}`;
             const file = await Deno.readFile(filePath);
             const contentType = getContentType(filePath);
             return new Response(file, {
                 headers: { "Content-Type": contentType },
             });
-        } else if (url.pathname === "/css/style.css") { // Fixed condition
-            const css = await Deno.readTextFile("web/css/style.css");
-            return new Response(css, {
-                headers: { "Content-Type": "text/css" },
-            });
+    }
+    try {
+        if (pathn.startsWith("/img/")) {
+            return await fileParse(pathn)
+        } else if (pathn === "/css/style.css") { // Fixed condition
+            return await fileParse(pathn)
         } else if (url.pathname === "/") {
             const html = await Deno.readTextFile("web/index.html");
             return new Response(html, {
                 headers: { "Content-Type": "text/html" },
             });
-        } else if (url.pathname.startsWith("/js/")) {
-            const filePath = `web${url.pathname}`;
-            const file = await Deno.readFile(filePath);
-            const contentType = getContentType(filePath);
+        } else if (url.pathname === "/pathfinding.ts") {
+            const file = await Deno.readTextFile("pathfinding.ts");
             return new Response(file, {
-                headers: { "Content-Type": contentType },
+                headers: { "Content-Type": "text/typescript" },
             });
+        } else if (pathn.startsWith("/js/")) {
+           return await fileParse(pathn)
         } else {
             return new Response("Not Found", { status: 404 });
         }
