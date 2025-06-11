@@ -6,6 +6,7 @@ export interface PathNode {
     id: string;         // e.g., '1-1'
     isStart: boolean;
     isEnd: boolean;
+    isPath: boolean;
 }
 
 export interface PathResult {
@@ -24,6 +25,10 @@ function makeId(row: number, col: number): string {
     return `${row}-${col}`;
 }
 
+export function isWhite (_id: string):boolean {
+    return true;
+}
+
 // Find path using BFS (returns shortest path)
 export function findPath(
     startId: string,
@@ -36,6 +41,7 @@ export function findPath(
     const visited = new Set<string>();
     queue.push({id: startId, path: [startId]});
     visited.add(startId);
+    
 
     while (queue.length > 0) {
         const {id, path} = queue.shift()!;
@@ -44,7 +50,8 @@ export function findPath(
             const resultPath: PathNode[] = path.map((pid, idx) => ({
                 id: pid,
                 isStart: idx === 0,
-                isEnd: idx === path.length - 1
+                isEnd: idx === path.length - 1,
+                isPath: idx !== 0 && idx !== path.length - 1, 
             }));
             return { path: resultPath, length: resultPath.length };
         }
@@ -66,8 +73,3 @@ export function findPath(
     return null;
 }
 
-// Example isWhite function for browser:
-// function isWhite(id) {
-//   const el = document.getElementById(id);
-//   return el && !el.classList.contains('square-dark');
-// }

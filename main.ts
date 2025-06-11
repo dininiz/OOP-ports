@@ -1,4 +1,8 @@
 import { serve } from "https://deno.land/std/http/server.ts";
+import { findPath, isWhite } from "./pathfinding.ts";
+
+const result = findPath ("18-21", "21-33", isWhite, 42, 64)
+console.log(result)
 
 serve(async (_req) => {
     const url = new URL(_req.url, `http://${_req.headers.get("host")}`);
