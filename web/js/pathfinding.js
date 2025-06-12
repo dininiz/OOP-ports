@@ -144,6 +144,17 @@ function addPoints() {
     };
   });
 }
+let btn = document.getElementById("reset-btn");
+btn.onclick = function () {
+    // Remove all start, end, and path classes
+    const squares = document.querySelectorAll('.square');
+    for (let i = 0; i < squares.length; i++) {
+      squares[i].classList.remove('start', 'end', 'path');
+    }
+    // Reset counters
+    counter1 = 0;
+    counter2 = 0;
+  };
 
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {

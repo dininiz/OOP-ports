@@ -54,3 +54,9 @@ body{
     overflow: hidden;
     /* background: rgb(0, 191, 255); */
 }
+button.btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
