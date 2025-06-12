@@ -20,12 +20,19 @@
     height: 100%;
     position: relative;
 }
-.square{
-    background: white;
+
+.square:hover{
+    transition: .1s;
+    cursor: pointer;
+    background: green;
 }
-.square-dark{
+.square-dark:hover{
+    cursor: not-allowed;
+    background: transparent;
+}
+/* .square-dark{
     background: black;
-}
+} */
 .path{
     background: blue;
 }

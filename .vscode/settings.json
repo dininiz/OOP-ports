@@ -13,4 +13,9 @@
     //     "editor.lineHighlightBackground": "#fdf6e3",
 
     // }
+    "editor.quickSuggestions": false,
+"editor.suggestOnTriggerCharacters": false,
+"editor.wordBasedSuggestions": false,
+"editor.inlineSuggest.enabled": false,
+"editor.parameterHints.enabled": true
 }
