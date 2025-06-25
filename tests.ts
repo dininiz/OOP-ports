@@ -19,25 +19,31 @@ class WallNode extends PathNode {
   }
 }
 
-Deno.test("Path array uses polymorphism with WallNode", async () => {
-  const data = await Deno.readTextFile("saved_path.json");
-  const rawPath: [number, number, string?][] = JSON.parse(data);
+const data = await Deno.readTextFile("saved_path.json");
+const rawPath: [number, number, string?][] = JSON.parse(data);
 
-  const path: PathNode[] = rawPath.map(([x, y]) =>
-  new PathNode(x, y)
-);
+const path: PathNode[] = rawPath.map(([x, y]) =>
+new PathNode(x, y));
 
-  // Test: path is an array and not empty
+Deno.test("Path array is not empty", () => {
+
   assert(Array.isArray(path), "Path should be an array");
   assert(path.length > 0, "Path should not be empty");
+  
+});
 
-  // Test: all nodes are traversable except WallNode
+Deno.test("All nodes in the path are travelable", () => {
+
   for (const node of path) {
-  assert(node.isTravelable(), "All nodes in the path should be traversable");
-  assert(!(node instanceof WallNode), "WallNode should not be present in the path array");
-}
+    assert(node.isTravelable(), "All nodes in the path should be traversable");
+    assert(!(node instanceof WallNode), "WallNode should not be present in the path array");
+  }
 
-  // Additional checks
+});
+
+Deno.test("Path elements are unique", () => {
+
   assert(path[0] !== path[1], "Path elements should not be the same");
   assert(path[0] !== path[path.length - 1], "First and last elements should not be the same");
+
 });
