@@ -1,15 +1,21 @@
 // deno-lint-ignore-file
 class PathNode {
-  constructor(x, y, isStart, isEnd, isPath, isWall) {
+  constructor(x, y, isStart, isEnd) {
     this.x = x;
     this.y = y;
     this.isStart = isStart;
     this.isEnd = isEnd;
-    this.isPath = isPath;
-    this.isWall = isWall;
+  }
+  isTravelable() {
+    return true;
   }
 }
 
+class WallNode extends PathNode {
+  isTravelable() {
+    return false;
+  }
+}
 let counter1 = 0;
 let counter2 = 0;
 
@@ -17,11 +23,14 @@ function runPathfinding() {
   const pathNodes = [];
   document.querySelectorAll(".square").forEach((square) => {
     const id = square.id.split("-").map(Number);
-    const isWall = square.classList.contains("square-dark");
     const isStart = square.classList.contains("start");
     const isEnd = square.classList.contains("end");
-    pathNodes.push(new PathNode(id[0], id[1], isStart, isEnd, false, isWall));
-  });
+    if (square.classList.contains("square-dark")) {
+      pathNodes.push(new WallNode(id[0], id[1], isStart, isEnd));
+    } else {
+      pathNodes.push(new PathNode(id[0], id[1], isStart, isEnd));
+    }  
+});
   
   const startElem = document.querySelector(".start");
   const endElem = document.querySelector(".end");
@@ -89,7 +98,7 @@ function runPathfinding() {
           newY <= cols &&
           !visited[newX][newY] &&
           grid[newX][newY] &&
-          !grid[newX][newY].isWall
+          grid[newX][newY].isTravelable()
         ) {
           grid[newX][newY].isPath = true;
           const nextPath = [];
@@ -151,12 +160,12 @@ function addPoints() {
 }
 let btn = document.getElementById("reset-btn");
 btn.onclick = function () {
-    // Remove all start, end, and path classes
+
     const squares = document.querySelectorAll('.square');
     for (let i = 0; i < squares.length; i++) {
       squares[i].classList.remove('start', 'end', 'path');
     }
-    // Reset counters
+
     counter1 = 0;
     counter2 = 0;
   };
