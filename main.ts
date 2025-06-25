@@ -24,7 +24,11 @@ serve(async (_req) => {
         });
         } else if (pathn.startsWith("/js/")) {
            return await fileParse(pathn)
-        } else {
+        } else if (_req.method === "POST" && url.pathname === "/save-path") {
+            const body = await _req.json();
+            await Deno.writeTextFile("saved_path.json", JSON.stringify(body.path));
+            return new Response("Path saved", { status: 200 });
+        } else{
             return new Response("Not Found", { status: 404 });
         }
     } catch (error) {

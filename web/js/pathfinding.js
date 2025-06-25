@@ -103,7 +103,18 @@ function runPathfinding() {
     }
     return null;
   }
+
+  
+  
   const path = pathfinding(startPoint, endPoint, pathNodes);
+
+  
+fetch('/save-path', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ path })
+});
+  
   console.log(path);
 
   // Remove previous path highlights
@@ -122,9 +133,8 @@ function runPathfinding() {
       }
     }
   }
-  
-
 }
+
 
 function addPoints() {
   const elements = document.querySelectorAll(".square");
