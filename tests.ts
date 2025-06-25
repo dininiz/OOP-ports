@@ -1,6 +1,6 @@
-import { assert, assertEquals } from "https://deno.land/std@0.203.0/testing/asserts.ts";
+import { assert } from "https://deno.land/std@0.203.0/testing/asserts.ts";
 
-Deno.test("Path array is not empty and contains only pairs", async () => {
+Deno.test("Path array is not empty and has no conflicting information among the elements", async () => {
   const data = await Deno.readTextFile("saved_path.json");
   const path: number[][] = JSON.parse(data);
 

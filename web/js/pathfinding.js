@@ -104,26 +104,21 @@ function runPathfinding() {
     return null;
   }
 
-  
-  
   const path = pathfinding(startPoint, endPoint, pathNodes);
 
-  
-fetch('/save-path', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ path })
-});
+  fetch('/save-path', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ path })
+  });
   
   console.log(path);
 
-  // Remove previous path highlights
   const prevPathElements = document.querySelectorAll('.path');
   for (let i = 0; i < prevPathElements.length; i++) {
     prevPathElements[i].classList.remove('path');
   }
 
-  // Only highlight the nodes in the final path
   if (path) {
     for (let i = 0; i < path.length; i++) {
       const elementId = path[i][0] + '-' + path[i][1];
