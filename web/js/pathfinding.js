@@ -1,21 +1,37 @@
 // deno-lint-ignore-file
-class PathNode {
-  constructor(x, y, isStart, isEnd) {
+class Coordinate {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
+  }
+  toString() {
+    return `${this.x}-${this.y}`;
+  }
+  equals(other) {
+    return this.x === other.x && this.y === other.y;
+  }
+}
+
+class PathNode {
+  constructor(coord, isStart, isEnd) {
+    this.coord = coord; // coord is a Coordinate (or subclass)
     this.isStart = isStart;
     this.isEnd = isEnd;
+    this.canTravel = true;
   }
+
   isTravelable() {
-    return true;
+    return this.canTravel;
   }
 }
 
 class WallNode extends PathNode {
-  isTravelable() {
-    return false;
+  constructor(coord, isStart, isEnd) {
+    super(coord, isStart, isEnd);
+    this.canTravel = false;
   }
 }
+
 let counter1 = 0;
 let counter2 = 0;
 
@@ -26,9 +42,11 @@ function runPathfinding() {
     const isStart = square.classList.contains("start");
     const isEnd = square.classList.contains("end");
     if (square.classList.contains("square-dark")) {
-      pathNodes.push(new WallNode(id[0], id[1], isStart, isEnd));
+      const coord = new Coordinate(id[0], id[1]);
+      pathNodes.push(new WallNode(coord, isStart, isEnd));
     } else {
-      pathNodes.push(new PathNode(id[0], id[1], isStart, isEnd));
+      const coord = new Coordinate(id[0], id[1]);
+      pathNodes.push(new PathNode(coord, isStart, isEnd));
     }  
 });
   
@@ -53,7 +71,7 @@ function runPathfinding() {
     }
     for (let i = 0; i < pathNodes.length; i++) {
       const node = pathNodes[i];
-      grid[node.x][node.y] = node;
+      grid[node.coord.x][node.coord.y] = node;
     }
     const [startX, startY] = startId.split("-").map(Number);
     const [endX, endY] = endId.split("-").map(Number);
@@ -98,7 +116,7 @@ function runPathfinding() {
           newY <= cols &&
           !visited[newX][newY] &&
           grid[newX][newY] &&
-          grid[newX][newY].isTravelable()
+          grid[newX][newY].canTravel == true
         ) {
           grid[newX][newY].isPath = true;
           const nextPath = [];
