@@ -23,6 +23,25 @@ class PathNode {
   isTravelable() {
     return this.canTravel;
   }
+  getNeighbors(grid) {
+    const dirs = [
+      [0, -1],
+      [0, 1],
+      [-1, 0],
+      [1, 0],
+      [-1, -1],
+      [1, 1],
+      [-1, 1],
+      [1, -1],
+    ];
+    const neighbors = [];
+    for (const [dx, dy] of dirs) {
+      const nx = this.coord.x + dx;
+      const ny = this.coord.y + dy;
+      if (grid[nx]?.[ny]) neighbors.push(grid[nx][ny]);
+    }
+    return neighbors;
+  }
 }
 
 class WallNode extends PathNode {
@@ -47,9 +66,9 @@ function runPathfinding() {
     } else {
       const coord = new Coordinate(id[0], id[1]);
       pathNodes.push(new PathNode(coord, isStart, isEnd));
-    }  
-});
-  
+    }
+  });
+
   const startElem = document.querySelector(".start");
   const endElem = document.querySelector(".end");
   if (!startElem || !endElem) {
@@ -83,16 +102,7 @@ function runPathfinding() {
       }
     }
     const queue = [[startX, startY, []]];
-    const directions = [
-      [0, -1],
-      [0, 1],
-      [-1, 0],
-      [1, 0],
-      [-1, -1],
-      [1, 1],
-      [-1, 1],
-      [1, -1],
-    ];
+
     while (queue.length > 0) {
       const current = queue.shift();
       const x = current[0];
@@ -104,27 +114,26 @@ function runPathfinding() {
         path.push([x, y]);
         return path;
       }
-      for (let d = 0; d < directions.length; d++) {
-        const dx = directions[d][0];
-        const dy = directions[d][1];
-        const newX = x + dx;
-        const newY = y + dy;
+      const node = grid[x][y];
+      // Use polymorphic neighbor calculation
+      const neighbors = node.getNeighbors(grid);
+      for (const neighbor of neighbors) {
+        const nx = neighbor.coord.x;
+        const ny = neighbor.coord.y;
         if (
-          newX >= 1 &&
-          newX <= rows &&
-          newY >= 1 &&
-          newY <= cols &&
-          !visited[newX][newY] &&
-          grid[newX][newY] &&
-          grid[newX][newY].canTravel == true
+          nx >= 1 &&
+          nx <= rows &&
+          ny >= 1 &&
+          ny <= cols &&
+          !visited[nx][ny] &&
+          neighbor.isTravelable()
         ) {
-          grid[newX][newY].isPath = true;
           const nextPath = [];
           for (let p = 0; p < path.length; p++) {
             nextPath.push(path[p]);
           }
           nextPath.push([x, y]);
-          queue.push([newX, newY, nextPath]);
+          queue.push([nx, ny, nextPath]);
         }
       }
     }
@@ -133,22 +142,22 @@ function runPathfinding() {
 
   const path = pathfinding(startPoint, endPoint, pathNodes);
 
-  fetch('/save-path', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ path })
+  fetch("/save-path", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path }),
   });
-  
+
   console.log(path);
 
-  const prevPathElements = document.querySelectorAll('.path');
+  const prevPathElements = document.querySelectorAll(".path");
   for (let i = 0; i < prevPathElements.length; i++) {
-    prevPathElements[i].classList.remove('path');
+    prevPathElements[i].classList.remove("path");
   }
 
   if (path) {
     for (let i = 0; i < path.length; i++) {
-      const elementId = path[i][0] + '-' + path[i][1];
+      const elementId = path[i][0] + "-" + path[i][1];
       const element = document.getElementById(elementId);
       if (element) {
         element.classList.add("path");
@@ -156,7 +165,6 @@ function runPathfinding() {
     }
   }
 }
-
 
 function addPoints() {
   const elements = document.querySelectorAll(".square");
@@ -166,27 +174,25 @@ function addPoints() {
         element.classList.add("start");
         counter1++;
       } else if (counter2 < 1) {
-        if (element.id != document.querySelector(".start").id){
+        if (element.id != document.querySelector(".start").id) {
           element.classList.add("end");
           counter2++;
           runPathfinding();
         }
-        
       }
     };
   });
 }
 let btn = document.getElementById("reset-btn");
 btn.onclick = function () {
+  const squares = document.querySelectorAll(".square");
+  for (let i = 0; i < squares.length; i++) {
+    squares[i].classList.remove("start", "end", "path");
+  }
 
-    const squares = document.querySelectorAll('.square');
-    for (let i = 0; i < squares.length; i++) {
-      squares[i].classList.remove('start', 'end', 'path');
-    }
-
-    counter1 = 0;
-    counter2 = 0;
-  };
+  counter1 = 0;
+  counter2 = 0;
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
