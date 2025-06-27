@@ -10,19 +10,6 @@ class Coordinate {
   equals(other) {
     return this.x === other.x && this.y === other.y;
   }
-}
-
-class PathNode {
-  constructor(coord, isStart, isEnd) {
-    this.coord = coord; // coord is a Coordinate (or subclass)
-    this.isStart = isStart;
-    this.isEnd = isEnd;
-    this.canTravel = true;
-  }
-
-  isTravelable() {
-    return this.canTravel;
-  }
   getNeighbors(grid) {
     const dirs = [
       [0, -1],
@@ -36,11 +23,57 @@ class PathNode {
     ];
     const neighbors = [];
     for (const [dx, dy] of dirs) {
-      const nx = this.coord.x + dx;
-      const ny = this.coord.y + dy;
+      const nx = this.x + dx;
+      const ny = this.y + dy;
       if (grid[nx]?.[ny]) neighbors.push(grid[nx][ny]);
     }
     return neighbors;
+  }
+}
+
+class Coordinate3D {
+  constructor(x,y,z) {
+    this.x = x;
+    this.y = y;
+    this.z = z; 
+  }
+  toString() {
+    return `${this.x}-${this.y}-${this.z}`;
+  }
+  equals(other) {
+    return this.x === other.x && this.y === other.y && this.z === other.z;
+  }
+  getNeigbors(grid) {
+    const neighbors = [];
+    for (let dx = -1; dx <=1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dz = -1; dz <= 1; dz++) {
+          if (dx === 0 && dy === 0 && dz === 0) continue;
+          const nx = this.x + dx;
+          const ny = this.y + dy;
+          const nz = this.z + dz;
+          if (grid[nx]?.[ny]?.[nz]) {
+            neighbors.push(grid[nx][ny][nz])
+          }
+        }
+      }
+    } 
+    return neighbors
+  }
+}
+
+class PathNode {
+  constructor(coord, isStart, isEnd) {
+    this.coord = coord; 
+    this.isStart = isStart;
+    this.isEnd = isEnd;
+    this.canTravel = true;
+  }
+  isTravelable() {
+    return this.canTravel;
+  }
+  getNeighbors(grid) {
+    return this.coord.getNeighbors(grid);
   }
 }
 
@@ -48,6 +81,9 @@ class WallNode extends PathNode {
   constructor(coord, isStart, isEnd) {
     super(coord, isStart, isEnd);
     this.canTravel = false;
+  }
+  getNeighbors(grid) {
+    return [];
   }
 }
 
@@ -115,6 +151,7 @@ function runPathfinding() {
         return path;
       }
       const node = grid[x][y];
+      
       // Use polymorphic neighbor calculation
       const neighbors = node.getNeighbors(grid);
       for (const neighbor of neighbors) {
